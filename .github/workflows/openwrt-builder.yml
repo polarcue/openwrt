@@ -20,7 +20,7 @@ on:
         default: 'true'
 
 env:
-  REPO_URL: https://github.com/jacelift/lede17.01_jacelift.git
+  REPO_URL: https://github.com/polarcue/lede17.01.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -57,7 +57,7 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
