@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/openwrt/openwrt.git
+  REPO_URL: https://github.com/llugithub/lede-17.01.5.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -55,7 +55,7 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone -b lede-17.01  $REPO_URL openwrt
+        git clone  $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
@@ -114,7 +114,7 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/ar71xx/generic/*
+        cd openwrt/bin/targets/ar71xx/generic
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
