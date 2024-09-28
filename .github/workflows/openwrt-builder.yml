@@ -20,7 +20,7 @@ on:
         default: 'true'
 
 env:
-  REPO_URL: https://github.com/polarcue/lede17.01.git
+  REPO_URL: https://github.com/polarcue/lede-17.01.5.git
   REPO_BRANCH: branch
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
