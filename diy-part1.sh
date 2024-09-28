@@ -14,5 +14,4 @@
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
-git clone https://github.com/Zxilly/UA2F.git package/UA2F
-git clone https://github.com/lucikap/luci-app-ua2f package/luci-app-ua2f
+#git clone https://github.com/Zxilly/UA2F.git package/UA2F
