@@ -65,8 +65,8 @@ jobs:
       id: package
       run: |
         cd openwrt
-        make dirclean
-        make download -j4
+        
+        make download -j2
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
