@@ -22,7 +22,7 @@ on:
         default: 'true'
 
 env:
-  REPO_URL: https://github.com/gl-inet/lede-17.01.git
+  REPO_URL: https://github.com/polarcue/lede-17.01.5
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -52,7 +52,6 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-        sudo apt-get install gcc-4.8
         
     - name: Clone source code
       working-directory: /workdir
