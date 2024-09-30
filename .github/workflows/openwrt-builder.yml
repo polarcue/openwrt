@@ -47,8 +47,13 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-        sudo apt-get install gcc-7 g++-7
-
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test	
+        sudo apt-get install gcc-11	
+        sudo apt-get install g++-11 
+        sudo update-alternatives 
+        sudo update-alternatives 
+        sudo update-alternatives 
+        
     - name: Clone source code
       working-directory: /workdir
       run: |
