@@ -94,36 +94,6 @@ jobs:
     - name: Display structure of downloaded files
       run: ls -R openwrt/dl
 
-    - name: fix ffreadahead
-      if: (!cancelled())
-      run:  |
-        cd  /workdir/openwrt/build_dir/host/m4-1.4.18
-        ls  /workdir/openwrt/build_dir/host
-        sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
-        echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
-        
-    - name: fix fseterr
-      if: (!cancelled())
-      run:  |
-        ls  /workdir/openwrt/build_dir/host
-        cd /workdir/openwrt/build_dir/host/bison-3.0.4
-        sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
-        echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
-
-    - name: fix devname
-      if: (!cancelled())
-      run:  |
-        ls /workdir/openwrt/build_dir/host/e2fsprogs-1.43.3
-        cd /workdir/openwrt/build_dir/host/e2fsprogs-1.43.3/lib/blkid
-        echo "#include <sys/sysmacros.h>">> ./devname.c
-
-    - name: Compile the firmware
-      id: compile
-      if: (!cancelled())
-      run: |
-        cd openwrt
-        make -j1 V=s
-      
     
     - name: Check space usage
       if: (!cancelled())
@@ -131,17 +101,16 @@ jobs:
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      if:  (!cancelled())
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
+        path: openwrt/dl
 
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
+        cd openwrt/dl
+        # rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
@@ -149,14 +118,12 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release tag
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
         [ ${UPLOAD_GOFILE} = true && ${{ steps.gofile.outputs.url }} ] && echo "🔗 [GoFile](${{ steps.gofile.outputs.url }})" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
@@ -181,7 +148,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 10
+        keep_latest: 100
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
