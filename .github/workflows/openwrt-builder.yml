@@ -58,6 +58,7 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        sudo chmod 777 openwrt
         
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
